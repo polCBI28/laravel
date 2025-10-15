@@ -1,65 +1,72 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Article;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class ArticleController extends Controller
+class ProductoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
+        return view('admin.Article.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'titulo' => 'required',
+            'contenido' => 'required',
+            'estado_publicacion' => 'required',
+
+        ]);
+
+        try {
+            $validator->validate();
+            Article::create([
+                'titulo' => $request->titulo,
+                'contenido' => $request->contenido,
+                'estado_publicacion' => $request->estado_publicacion,
+            ]);
+            return redirect()->route('admin.Article.index')
+                ->with('success', ' el articulo fue registrado correctamente. ');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->validator->errors())->withInput();
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
-    }
+        $validator = Validator::make($request->all(), [
+            'titulo'=> 'required',
+            'contenido' => 'required',
+            'estado_publicacion' => 'required',
 
-    /**
-     * Remove the specified resource from storage.
-     */
+        ]);
+
+        try {
+            $validator->validate();
+
+            $producto = Article::findOrFail($id);
+            Article::update([
+                'titulo' => $request->titulo,
+                'contenido' => $request->contenido,
+                'estado_publicacion' => $request->estado_publicacion,
+            ]);
+            return redirect()->route('admin.Article.index')
+                ->with('success', ' el articulo fue actualizado correctamente. ');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->validator->errors())->withInput();
+        }
+    }
     public function destroy(string $id)
     {
-        //
+        Article::find($id)->delete();
+        return redirect()->route('admin.Article.index')->with('success', 'El producto fue eliminado correctamente.');
     }
 }
