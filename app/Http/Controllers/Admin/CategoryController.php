@@ -3,63 +3,69 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class CategoryController extends Controller
+class ProductoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
+        return view('admin.Category.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'description' => 'required',
+            'color' => 'required',
+
+        ]);
+
+        try {
+            $validator->validate();
+            Product::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'color' => $request->color,
+            ]);
+            return redirect()->route('admin.producto.index')
+                ->with('success', ' el articulo fue registrado correctamente. ');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->validator->errors())->withInput();
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
-    }
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'description' => 'required',
+            'color' => 'required',
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
+        try {
+            $validator->validate();
+
+            $producto = Product::findOrFail($id);
+            Product::update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'color' => $request->color,
+            ]);
+            return redirect()->route('admin.producto.index')
+                ->with('success', ' el articulo fue actualizado correctamente. ');
+        } catch (ValidationException $e) {
+            return back()->withErrors($e->validator->errors())->withInput();
+        }
+    }
     public function destroy(string $id)
     {
-        //
+        Product::find($id)->delete();
+        return redirect()->route('admin.producto.index')->with('success', 'El producto fue eliminado correctamente.');
     }
 }
