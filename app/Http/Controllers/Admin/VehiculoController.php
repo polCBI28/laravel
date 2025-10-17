@@ -20,18 +20,21 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required',
-            'descripcion' => 'required',
-            'precio' => 'required',
+            'marca' => 'required',
+            'modelo' => 'required',
+            'anio' => 'required',
+            'color' => 'required',
+            
 
         ]);
 
         try {
             $validator->validate();
             Vehiculo::create([
-                'nombre' => $request->nombre,
-                'descripcion' => $request->descripcion,
-                'precio' => $request->precio,
+                'marca' => $request->marca,
+                'modelo' => $request->modelo,
+                'anio' => $request->anio,
+                'color' => $request->color,
             ]);
             return redirect()->route('admin.vehiculo.index')
                 ->with('success', ' el articulo fue registrado correctamente. ');
@@ -43,23 +46,25 @@ class ProductoController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required',
-            'descripcion' => 'required',
-            'precio' => 'required',
+            'marca' => 'required',
+            'modelo' => 'required',
+            'anio' => 'required',
+            'color' => 'required',
 
         ]);
 
         try {
             $validator->validate();
 
-            $producto = Vehiculo::findOrFail($id);
+            $vehiculo = Vehiculo::findOrFail($id);
             Vehiculo::update([
-                'nombre' => $request->nombre,
-                'descripcion' => $request->descripcion,
-                'precio' => $request->precio,
+                'marca' => $request->marca,
+                'modelo' => $request->modelo,
+                'anio' => $request->anio,
+                'color' => $request->color,
             ]);
             return redirect()->route('admin.vehiculo.index')
-                ->with('success', ' el articulo fue actualizado correctamente. ');
+                ->with('success', ' el vehiculo fue actualizado correctamente. ');
         } catch (ValidationException $e) {
             return back()->withErrors($e->validator->errors())->withInput();
         }

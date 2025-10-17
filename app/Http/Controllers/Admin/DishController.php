@@ -20,19 +20,20 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'marca' => 'required',
-            'modelo' => 'required',
-            'anio' => 'required',
-            'color' => 'required',
+            'nombre' => 'required',
+            'descripcion' => 'required',
+            'presio' => 'required',
+            'tipo' => 'required',
+
         ]);
 
         try {
             $validator->validate();
             Dish::create([
-                'marca' => $request->marca,
-                'modelo' => $request->modelo,
-                'anio' => $request->anio,
-                'color' => $request->color,
+                'nombre' => $request->nombre,
+                'descripcion' => $request->descripcion,
+                'presio' => $request->presio,
+                'tipo' => $request->tipo,
                 
             ]);
             return redirect()->route('admin.dish.index')
@@ -45,21 +46,21 @@ class ProductoController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'marca' => 'required',
-            'modelo' => 'required',
-            'anio' => 'required',
-            'color' => 'required',
+            'nombre' => 'required',
+            'descripcion' => 'required',
+            'presio' => 'required',
+            'tipo' => 'required',
         ]);
 
         try {
             $validator->validate();
 
-            $producto = Dish::findOrFail($id);
+            $dish = Dish::findOrFail($id);
             Dish::update([
-                'marca' => $request->marca,
-                'modelo' => $request->modelo,
-                'anio' => $request->anio,
-                'color' => $request->color,
+                'nombre' => $request->nombre,
+                'descripcion' => $request->descripcion,
+                'presio' => $request->presio,
+                'tipo' => $request->tipo,
             ]);
             return redirect()->route('admin.dish.index')
                 ->with('success', ' el plato fue actualizado correctamente. ');

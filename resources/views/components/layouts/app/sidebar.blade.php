@@ -15,6 +15,11 @@
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     <flux:navlist.item icon="shopping-cart" :href="route('admin.producto.index')" :current="request()->routeIs('admin.producto.index')" wire:navigate>{{ __('Producto') }}</flux:navlist.item>
+                    <flux:navlist.item icon="shopping-cart" :href="route('admin.article.index')" :current="request()->routeIs('admin.article.index')" wire:navigate>{{ __('Article') }}</flux:navlist.item>
+                    <flux:navlist.item icon="shopping-cart" :href="route('admin.dish.index')" :current="request()->routeIs('admin.dish.index')" wire:navigate>{{ __('Dish') }}</flux:navlist.item>
+                    <flux:navlist.item icon="shopping-cart" :href="route('admin.grade.index')" :current="request()->routeIs('admin.grade.index')" wire:navigate>{{ __('Grade') }}</flux:navlist.item>
+                    <flux:navlist.item icon="shopping-cart" :href="route('admin.vehiculo.index')" :current="request()->routeIs('admin.vehiculo.index')" wire:navigate>{{ __('Vehiculo') }}</flux:navlist.item>
+
                 </flux:navlist.group>
 
             </flux:navlist>
